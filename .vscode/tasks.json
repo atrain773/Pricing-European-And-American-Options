@@ -8,7 +8,9 @@
         "-fcolor-diagnostics",
         "-fansi-escape-codes",
         "-g",
-        "${file}",
+        "${workspaceFolder}/src/main.cpp",
+        "${workspaceFolder}/src/data_record.cpp",
+        "-I${workspaceFolder}/include",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}"
       ],
