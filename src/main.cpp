@@ -1,4 +1,5 @@
 #include "../include/data_record.h"
+#include "../include/black-scholes_formula.h"
 
 using namespace std;
 
@@ -10,9 +11,17 @@ int main() {
 
     // Testing Part 2 Implement Black-Scholes Merton Formula (Anton)
 
+    char c = 'c';
+    double T = 1;
+    double K = 100;
+    double S_0 = 100;
+    double r = 0.05;
+    double q = 0.04;
+    double sigma = 0.2;
 
+    double black_scholes = blackScholes(c, S_0, K, r, q, sigma, T);
 
-
+    cout << "Black Scholes Value: " << black_scholes << endl;
  
     // E.C
     // Testing Part 6 
