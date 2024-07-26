@@ -10,6 +10,8 @@
         "-g",
         "${workspaceFolder}/src/main.cpp",
         "${workspaceFolder}/src/data_record.cpp",
+        "${workspaceFolder}/src/black-scholes_formula.cpp",
+        "${workspaceFolder}/src/crr_binomial_model.cpp",
         "-I${workspaceFolder}/include",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}"

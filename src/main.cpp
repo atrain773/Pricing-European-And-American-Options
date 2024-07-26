@@ -3,6 +3,20 @@
 using namespace std;
 
 int main() {
+
+
+    // Testing Part 1 Implement CRR Binomial Model (Jiaqi)
+
+
+    // Testing Part 2 Implement Black-Scholes Merton Formula (Anton)
+
+
+
+
+ 
+    // E.C
+    // Testing Part 6 
+
     ifstream file("../data/cleaned/ProjectOptionData.csv");
     string line;
     vector<DataRecord> records;
