@@ -209,4 +209,6 @@ float CrrBinomial::GetPrice(){
 //     cout << "European put: " << test_e_put.GetPrice() << endl;
 //     cout << "European call: " << test_e_call.GetPrice() << endl;
 //     cout << "American put: " << test_a_put.GetPrice() << endl;
-//     cout << "American call: " << test_a_call.
+//     cout << "American call: " << test_a_call.GetPrice();
+//     return 0;
+// }
