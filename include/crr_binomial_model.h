@@ -16,4 +16,4 @@ double binomialOptionPrice(char option, double K, double T, double S0, double si
 int checkAccuracy(char option, double K, double T, double S0, double sigma, double r, double q);
 double findCriticalStockPrice(char Option, double K, double T, double sigma, double r, double q, char Exercise);
 std::vector<std::vector<double> > question_2();
-void question_3_4(double q, char option);
+void question_34(double q, char option);

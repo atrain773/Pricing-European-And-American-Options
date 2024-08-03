@@ -35,12 +35,12 @@ int main() {
     cout << "Call Value: " << black_scholes_european_call << endl << endl;
 
     //question 3
-    question_3_4(0.0,'P'); //American put with q = 0
-    question_3_4(0.04,'P');//American put with q = 0.04
+    question_34(0.0,'P'); //American put with q = 0
+    question_34(0.04,'P');//American put with q = 0.04
 
     //question 4
-    question_3_4(0.04,'C');//American call with q = 0.04
-    question_3_4(0.08,'C');//American call with q = 0.08
+    question_34(0.04,'C');//American call with q = 0.04
+    question_34(0.08,'C');//American call with q = 0.08
 
 
     // E.C
