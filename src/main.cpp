@@ -20,4 +20,44 @@ int main() {
     // Testing Part 2 Implement Black-Scholes Merton Formula (Anton)
 
     double T = 1;
-    d
+    double K = 100;
+    double S_0 = 100;
+    double r = 0.05;
+    double q = 0.04;
+    double sigma = 0.2;
+
+    double black_scholes_european_put = blackScholes('p', S_0, K, r, q, sigma, T);
+    double black_scholes_european_call = blackScholes('c', S_0, K, r, q, sigma, T);
+
+    cout << "Black Scholes (European)" << endl;
+    cout << "-------------------" << endl; 
+    cout << "Put Value: " << black_scholes_european_put << endl;
+    cout << "Call Value: " << black_scholes_european_call << endl << endl;
+
+    //question 3
+    question_3_4(0.0,'P'); //American put with q = 0
+    question_3_4(0.04,'P');//American put with q = 0.04
+
+    //question 4
+    question_3_4(0.04,'C');//American call with q = 0.04
+    question_3_4(0.08,'C');//American call with q = 0.08
+
+
+    // E.C
+    // Testing Part 6 
+
+    ifstream file("../data/cleaned/ProjectOptionData.csv");
+    string line;
+    vector<DataRecord> records;
+
+    // Skip header line
+    getline(file, line);
+
+    // Read and parse each line
+    while (getline(file, line)) {
+        records.push_back(parseCSVLine(line));
+    }
+
+
+  return 0;
+}

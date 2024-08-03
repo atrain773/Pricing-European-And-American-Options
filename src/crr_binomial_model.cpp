@@ -74,45 +74,93 @@ double binomialOptionPrice(char option, double K, double T, double S0, double si
     return optionPrices[0];
 }
 
-//result outputer
-//{0 - 1500}
-std::vector<std::vector<double> > question_2(){
-    
-    //row 0 - # of time steps - (i*100)
-    //row 1 - option price with time step (i*100)
-    //row 2 - computational time - (unit: seconds)
-    std::vector<std::vector<double> > arr(3, std::vector<double>(31));
+//check the aurrency
+int checkAccuracy(char option, double K, double T, double S0, double sigma, double r, double q) {
+    char exercise = 'A';//In question 3 and 4, we only need to predict American option price.
+    double tolerance = 1e-3;
+    double prev_price = 0.0;
+    double price = 0.0;
 
-    ofstream outputFile("../plot/convergence.csv");  // Open file for writing
+    int N = 100;//let N starts with 100
 
-     if (!outputFile.is_open()) {
-        cerr << "Error opening file!" << endl;
-        return arr;
+    while(true){
+        price = binomialOptionPrice(option, K, T, S0, sigma, r, q, N, exercise);
+
+        //once the error between price and previous price is less than tolerance, break;
+        if(fabs(price - prev_price) < tolerance){
+            return N;
+        }
+
+        N *= 2;
+        prev_price = price;
     }
 
-    for(int i = 1; i <= 300; i++){
-        //auto start = high_resolution_clock::now();
+    //Finding failure
+    return -1;
+}
+
+//find critical stock price
+double findCriticalStockPrice(char Option, double K, double T, double sigma, double r, double q, char Exercise) {
+    double S0 = 90;
+    double epsilon = 0.005;
+    double intrinsicValue, optionPrice;
+
+    while (true) {
+        if(Option == 'P') S0 += 5;// Increment stock price by small interval
+        if(Option == 'C') S0 -= 5;// decrement stock price by small interval
+        int N = checkAccuracy(Option,100, T, S0, 0.2, 0.05, q);
+        optionPrice = binomialOptionPrice(Option, K, T, S0, sigma, r, q, N, Exercise);
+        if (Option == 'P') {
+            intrinsicValue = max(K - S0,0.0);
+        } else if (Option == 'C') {
+            intrinsicValue = max(S0 - K,0.0);
+        }
+        //cout << S0 << " | option price " << optionPrice << " | intrinsicValue:" << intrinsicValue << "| differnce: " << fabs(optionPrice - intrinsicValue) << endl;
+        if (fabs(optionPrice - intrinsicValue) < epsilon) {
+            return optionPrice;
+        }
+    }
+
+    if(S0 > 300) return -1;
+    if(S0 < 0) return -1;
+}
+
+
+//result outputer
+//question 2
+std::vector<std::vector<double> > question_2(){
+    
+    //row 0 - # of time steps - (i*10)
+    //row 1 - option price with time step (i*10)
+    //row 2 - computational time - (unit: seconds)
+    std::vector<std::vector<double> > arr(3, std::vector<double>(101));
+
+    for(int i = 0; i <= 100; i++){
+        auto start = high_resolution_clock::now();
         double price = binomialOptionPrice('C', 100, 1, 100, 0.2, 0.05, 0.04, 10*i, 'E');
-        //auto end = high_resolution_clock::now();
-        //auto duration = duration_cast<microseconds>(end - start);//computational time
+        auto end = high_resolution_clock::now();
+        auto duration = duration_cast<microseconds>(end - start);//computational time
         arr[0][i] = i*10;//N - # of time steps
         arr[1][i] = price;//option price with i*100 steps
-        //arr[2][i] = duration.count()*1e-6;//seconds
-        outputFile << i*10 << "," << price << "," << endl;
+        arr[2][i] = duration.count()*1e-6;//seconds
+        //cout << i << "| N: " << arr[0][i] << "| price: " << arr[1][i] << "| time: " << arr[2][i]<< endl;
     }
 
     return arr;
 }
 
-void qestion_3(){
-    double T;
+void question_3_4(double q, char option){
+    double T = 1;
+
     for (int i = 1; i <= 12; ++i) {
         T = i / 12.0;
-        double putPrice = binomialOptionPrice('P', 100, T, 100, 0.2, 0.05, 0, 1000, 'A');
-        std::cout << "Time to maturity: " << T << " years, Put price: " << putPrice << std::endl;
+        double Price = binomialOptionPrice(option, 100, T, 100, 0.2, 0.05, q, 3000, 'A');
+        double aPrice = binomialOptionPrice(option, 100, T, 100, 0.2, 0.05, q, checkAccuracy(option,100, T, 100, 0.2, 0.05, 0), 'A');
+        cout << "Time to maturity: " << T << " years, Put price with 3000 steps(q = " << q << "): " << Price  << " | ";
+        cout << "N = " << checkAccuracy(option,100, T, 100, 0.2, 0.05, q) << " Put price with N steps(q = " << q << "): " << aPrice  << " | difference: " << abs(Price-aPrice) << endl;
 
-        double criticalPrice = binomialOptionPrice('P', 100, T, 100, 0.2, 0.05, 0.04, 1000, 'A');
-        std::cout << "Time to maturity: " << T << " years, Critical stock price: " << criticalPrice << std::endl;
+        double criticalPrice = findCriticalStockPrice(option, 100, T, 0.2, 0.05, q,'A');
+        std::cout << "Time to maturity: " << T << " years, Critical stock price(q = " << q << "): " << criticalPrice << std::endl;
     }
 }
 
